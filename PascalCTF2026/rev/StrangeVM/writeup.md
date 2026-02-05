@@ -59,7 +59,7 @@ unsigned char code_pascal[] = {
 unsigned int code_pascal_len = 1652;
 ```
 
-We can convert this into a human-readable format using a simple python script (See `convert.py`)
+We can convert this into a human-readable format using a simple python script (See `./convert.py`)
 
 ---
 

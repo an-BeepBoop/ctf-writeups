@@ -18,6 +18,7 @@ Heap allocations use the standard library `malloc()` call. As such each allocati
 represented by a **chunk** containing metadata followed by user controlled data. 
 
 According to https://github.com/lattera/glibc/blob/master/malloc/malloc.c
+<pre>
 +------------------------+
 | prev_size (8 bytes)    | <- Only used if prev_chunk is free
 +------------------------+
@@ -27,6 +28,7 @@ According to https://github.com/lattera/glibc/blob/master/malloc/malloc.c
 | user-controlled data   | <- pointer returned by malloc()
 |        ...             |
 +------------------------+
+</pre>
 The allocator intrinsically trusts chunk metadata such as the `size` and `prev_size` fields when 
 performing these allocation/free. If this metadata is corrupted, the allocator can be tricked 
 into misclassifying a chunk’s size or boundaries, causing adjacent memory to be treated as part of the same allocation.
@@ -84,10 +86,14 @@ overlaps the `target` chunk, allowing the `target` value to be overwritten.
 
 Before
 [ Player 4 Chunk ]
+<pre>
 | prev_size | size=0x51 |<----------- 72 bytes user data ---------->|
+</pre>
 
 After
 [ Player 4 Chunk ]
+
+<pre>
 | prev_size | size=0x71 |<---------------- expanded user data ----------------->|
 
                                         |
@@ -98,7 +104,7 @@ After
                          ^
                          |
               now inside writable region
-
+</pre>
 With the `target` now within the writable region of player4's chunk. We can simply edit player4's 
 user data to the expected value to trigger the flag. 
 
@@ -106,14 +112,16 @@ user data to the expected value to trigger the flag.
 
 Note that importantly when the program is initialised, `setup_chall()` allocates and 
 frees 4 players than allocates the `target`. So initially the heap will look like the following.
-
+<pre>
  [ Player 0 ] → [ Player 1 ] → [ Player 2 ] → [ Player 3 ]  → [ Target ]
    0x50         0x50         0x50         0x50          0x20
+</pre>
 
 No **coalescing!**
+<pre>
 [ free 0 ] → [ free 1 ] → [ free 2 ] → [ free 3 ]  → [ Target ]
                                                 0x20
-
+</pre>
 ---
 
 Thus the final exploit is as follows:
