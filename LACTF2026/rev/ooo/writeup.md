@@ -35,6 +35,7 @@ Since
 $$
 (x_i \cdot x_{i+1}) \bmod x_i = 0 \quad \text{(for } x_i \neq 0\text{)},
 $$
+
 the index expression simplifies to:
 
 $$
