@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+from Crypto.Util.number import long_to_bytes
+
+
+
+n = 58938973766860631460286171735180031193713789547243074197571332728958098621368090287262373918177464162738165592219642679833003940086885987855133349355410116000596121956637656346003513277862591336270615815319870284353756067628908468112514913326994013010887045664222471891132868821762396728669724838169721504429571659464419636622893776057161078759735189214433178365869490158137292132216391012853155515913624267077794948005157040625565503690864584070803874292599288335025098091441287238165212391820410684812074270259
+
+c = 19190809269631575990839989933575851273474666122243070961246953585043766095571981616907598694969105854212860006600580781712230144745197489553229465384363376499764597530295652642901015375874337058339548558156955681071710954282113440583336577513299176976683436124028383335545261509743649642672667688657253140908035722464232701802969743821787257881226069108776311495909131197815380403886676306831259519224024028803482571748808989097927092398026738239320723141932866207108433130061218293581971619105642449925103437977
+
+# Checks if all digits are six-seven
+def only_six_seven(x):
+    return all(d in "67" for d in str(x))
+
+# Try to bruteforce DFS a prime p from n = p * q
+# At each step we know k digits of p,  we know the last digits of are 
+# q = n × p_k^(-1) (mod 10^k)
+# We can prune invalid cases since q has to be a six-seven number
+def recover_prime(n, target_len: int = 256):
+    # Last digit is a 7 (since its prime)
+    stack = [7] 
+    while stack:
+        current = stack.pop()
+
+        next_len = len(str(current)) + 1
+        modulo = 10 ** next_len
+
+        for digit in ("6", "7"):
+            candidate = int(digit + str(current))
+            # q = n × p_k^(-1) (mod 10^k)
+            q_tail = n * pow(candidate, -1, modulo) % modulo
+
+            if only_six_seven(q_tail) and len(str(q_tail)) == next_len:
+                if next_len == target_len:
+                    return candidate
+                stack.append(candidate)
+    return None
+
+
+# Recover p
+p = recover_prime(n)
+
+if p is None:
+    print("No solution found.")
+    exit()
+
+# Decrypt
+q = n // p
+phi = (p - 1) * (q - 1)
+e = 65537 # From chall.py
+d = pow(e, -1, phi)
+m = pow(c, d, n)
+flag = long_to_bytes(m)
+
+print(flag)
