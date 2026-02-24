@@ -1,0 +1,13 @@
+movl r1, 0xF0
+ldr  r1, [r1]
+movl r2, 0x10
+add  r1, r1, r2
+movl r2, 0x01
+sub  r1, r1, r2
+movl r3, 0xFF
+seth r3, 0x03
+movl r4, 0x01
+add  r3, r3, r4
+orr  r1, r1, r3
+movl r2, 0xF0
+str  r1, [r2]
