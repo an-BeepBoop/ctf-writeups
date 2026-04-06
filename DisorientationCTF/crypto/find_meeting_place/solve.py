@@ -14,7 +14,6 @@ def fromChar(ch):
 def fromNum(n):
     return chr(n + ord('A'))
 
-
 plaintext = [
     "ENGINEERINGISBET",
     "TERTHANCOMPUTING"
@@ -39,7 +38,6 @@ a = multinv[(x2 - x1) % MOD] * (y2 - y1) % MOD
 
 # b = (y - a * x) % MOD
 b = (y1 - a * x1) % MOD
-
 
 # For s1 and s2 are starting index, shift ≡ s2 - s1 (mod 16)
 # To find s1 and s2, we check where the first letter of each line appears in the ciphertext row.

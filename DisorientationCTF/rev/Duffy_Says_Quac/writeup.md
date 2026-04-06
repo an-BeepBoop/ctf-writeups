@@ -25,14 +25,17 @@ There are two main ways to simulate execution:
 
 ### Option 1: Use a QuAC CPU in Digital
 
-If you were a student that took COMP2300 in 2025, you will have a QuAC-ISAv3 compatible CPU implemented in [Digital](https://github.com/hneemann/Digital/). We can load the program into the CPU and run it.
+If you were a student who took COMP2300 in 2025, you would have a QuAC-ISAv3–compatible CPU implemented in [Digital](https://github.com/hneemann/Digital/). You can load your program into this CPU and run it directly. Alternatively, instructions can be executed using the [emulator](https://comp.anu.edu.au/courses/comp2300/resources/11-QuAC-emulator/). However, because the initial condition requires `mem[0x00F0] = 0xFADE`, you will need to insert a number of `.word` directives to ensure that memory address is correctly initialized. Once your program has finished running on the emulator you can check the result from the memory viewer on the webpage.
+
 
 ### Option 2: Use a Virtual Machine
 
 If a hardware simulation is unavailable, we can instead emulate execution using a simple VM.
 The provided `vm.py` and `solve.py` simulate the QuAC instruction set and execute the program directly.
 
-Simulating the program yields:
+> **Note:** Interestingly, the memory in the sample `.bin` file is byte-addressable, not word-addressable as in the original specification. As a result, the `PC` increments by the byte length of each instruction (2) rather than by the word length (1) after each instruction executes.
+
+Running the program yields:
 ```bash
 ./solve.py 
   PC=0x0000  movl r1, 0xF0

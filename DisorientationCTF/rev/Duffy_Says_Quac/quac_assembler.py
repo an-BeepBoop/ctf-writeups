@@ -30,3 +30,4 @@ if __name__ == "__main__":
             word = memory[addr]
             asm = disassemble_word(word)
             f.write(f"{asm}\n")
+    print("Written quac program mystery.txt to mystery.quac")

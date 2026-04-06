@@ -1,30 +1,14 @@
 #!/usr/bin/env python3
 
-SHARK = ord('🦈')  
+# Frequency analysis shows MEDAL maps to SPACE"
+MEDAL = ord("🥇")  
+SPACE = ord(" ")  
 
 ciphertext = "🥻🦏🦌🥇🦏🦜🦔🦉🦓🦌🥇🦎🦈🦛🦌🦒🦌🦌🦗🦌🦙🦚🥇🦖🦍🥇🦛🦏🦌🥇🦚🦌🦈🦚🥓🥇🦚🦈🦍🦌🦎🦜🦈🦙🦋🦐🦕🦎🥇🦛🦏🦌🥇🦉🦙🦐🦋🦎🦌🦚🥇🦛🦖🥇🦛🦏🦌🥇🦋🦌🦗🦛🦏🦚🥇🦖🦍🥇🦛🦏🦌🥇🦜🦕🦒🦕🦖🦞🦕🥕🥇🦋🦐🦚🦖🦙🦐🦌🦕🦛🦈🦛🦐🦖🦕🦢🦚🦌🦈🦍🦓🦖🦖🦙🦆🦊🦈🦉🦓🦌🦚🦆🦉🦌🦞🦈🦙🦌🦤"
 
-# Trial and error
-special = {
-    -65: ' ',   
-    26:  '{',  
-    28:  '}', 
-    -2:  '_',
-    -53: '!',
-    -51: '?',
-    -13: 'T',
-}
 
-result = ''
-for c in ciphertext:
-    n = ord(c) - SHARK  
-    if 0 <= n <= 25:
-        # 0 -> a, 25 -> z
-        result += chr(n + ord('a'))  
-    elif n in special:
-        result += special[n]
-    else:
-        result += f'[{n}]'
+plaintext = ''.join(chr(ord(x) - (MEDAL - SPACE)) for x in ciphertext)
+print(plaintext)
 
-print("Decoded:", result)
+
 
