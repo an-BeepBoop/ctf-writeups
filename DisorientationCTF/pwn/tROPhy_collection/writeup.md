@@ -2,6 +2,8 @@
 
 The given program simulates a trophy management system in which the user can display their trophies, update their name or otherwise exit.
 
+> Note: I just realised the program itself has the string /bin/sh in the binary. This writeup is based on [solve-old.py](./solve-old.py) which manually constructs the /bin/sh string. The nwe solve [solve.py](./solve.py) just does this without constructing the /bin/sh string.
+
 First let's do some diagnostics:
 ```bash
 checksec vuln

